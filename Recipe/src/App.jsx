@@ -1,42 +1,51 @@
 import { useState } from 'react'
 import './App.css'
-import RecipeForm from './Component/RecipeForm'
+
+import RecipeAdd from './Components/RecipeAdd'
+import RecipeRemove from './Components/RecipeRemove'
 
 function App() {
 
   const [recipes, setRecipes] = useState([])
+
+  // Add Recipe
   const addRecipe = (recipe) => {
-    setRecipes((prev) => [...prev, recipe])
+
+    const newRecipe = {
+      ...recipe,
+      id: Date.now()
+    }
+
+    setRecipes((prev) => [
+      ...prev,
+      newRecipe
+    ])
+  }
+
+  // Remove Recipe
+  const removeRecipe = (id) => {
+
+    setRecipes((prev) =>
+      prev.filter((recipe) => recipe.id !== id)
+    )
   }
 
   return (
-    <>
+    <div className="app">
+
       <h1>Recipe App 😋</h1>
 
-      <RecipeForm onAdd={addRecipe} />
+      <RecipeAdd
+        onAdd={addRecipe}
+      />
 
-      <div className="recipe-list">
+      <RecipeRemove
+        recipes={recipes}
+        onRemove={removeRecipe}
+      />
 
-        {recipes.map((recipe, index) => (
-          <div className="recipe-card" key={index}>
-
-            <h2>{recipe.name}</h2>
-
-            <p>
-              <strong>Ingredients:</strong> {recipe.ingredients}
-            </p>
-
-            <p>
-              <strong>Cooking Time:</strong> {recipe.time} minutes
-            </p>
-
-          </div>
-        ))}
-
-      </div>
-    </>
+    </div>
   )
 }
 
 export default App
-
